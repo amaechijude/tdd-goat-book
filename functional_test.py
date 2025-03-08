@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import unittest
+
+
 localhost: str = "http://localhost:8000"
 
 class NewSiteVsitorTest(unittest.TestCase):
@@ -47,7 +49,27 @@ class NewSiteVsitorTest(unittest.TestCase):
         # She enters "Use peacock feathers to make a fly"
         # (Edith is very methodical)
 
-        # self.fail("Finish the test")
+        inputbox = self.browser.find_element(By.ID, "id_new_item")
+        inputbox.send_keys("Use peackock feather to make fly")
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+        # The page updates again, and now shows both items on her list
+        table = self.browser.find_element(By.ID, "id_list_table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
+
+        self.assertIn(
+            "1: Buy peacock feathers",
+            [row.text for row in rows]
+        )
+        self.assertIn(
+            "2: Use peackock feather to make fly",
+            [row.twxt for row in rows]
+        )
+
+        # Satisfied, she goes back to sleep
+
+        self.fail("Finish the test")
 
 
 if __name__ == "__main__":
